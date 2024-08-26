@@ -20,7 +20,22 @@ const meta: Meta<typeof Button> = {
   },
 };
 
-export default meta;
+export default {
+  title: "Example/Button",
+  component: Button,
+  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  argTypes: {
+    backgroundColor: { control: "color" },
+  },
+  tags: ["autodocs"],
+  parameters: {
+    myAddonParameter: `
+<MyComponent boolProp scalarProp={1} complexProp={{ foo: 1, bar: '2' }}>
+  <SomeOtherComponent funcProp={(a) => a.id} />
+</MyComponent>
+`,
+  },
+};
 type Story = StoryObj<typeof Button>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
@@ -51,3 +66,6 @@ export const Small: Story = {
     label: "Button",
   },
 };
+
+
+//meta.globals['sdd'] = "xxxxx";
