@@ -10,7 +10,7 @@ interface Pprops {
 /**
  * Primary UI component for user interaction
  */
-export const Psx = ({
+export const ComponentA = ({
   content,
   ...props
 }: Pprops) => {

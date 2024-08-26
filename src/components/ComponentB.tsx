@@ -1,5 +1,5 @@
 import React from 'react';
-import { Psx } from './Psx';
+import { ComponentA } from './ComponentA';
 
 interface ButtonProps {
   /**
@@ -11,13 +11,13 @@ interface ButtonProps {
 /**
  * Primary UI component for user interaction
  */
-export const Spanx = ({
+export const ComponentB = ({
   label,
   ...props
 }: ButtonProps) => {
   return (
     <div>
-    <Psx content={'This is ppp'} />
+    <ComponentA content={'This is ppp'} />
     <span
       {...props}
     >
