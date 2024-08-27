@@ -5,6 +5,8 @@
 
 > **Note:** This project is a work in progress and is under active development.
 
+![CleanShot 2024-08-27 at 01 50 02@2x](https://github.com/user-attachments/assets/7c9e4b1b-eb82-4eb7-a8e7-ca015b6e2636)
+
 ## Features
 - **Visual Dependency Mapping**: Automatically load and display all dependencies for the currently open story, providing a clear and structured view similar to [storybook-addon-deps](https://storybook.js.org/addons/storybook-addon-deps).
 - **Seamless Integration**: Integrates seamlessly with Storybook, enhancing your development workflow.
