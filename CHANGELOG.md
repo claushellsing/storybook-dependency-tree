@@ -1,5 +1,20 @@
 # v0.0.2 (Tue Aug 27 2024)
 
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:claushellsing/storybook-dependency-tree (claushellsing@gmail.com)
+- Update package.json ([@claushellsing](https://github.com/claushellsing))
+- Update README.md ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 2
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+- rainerelirodriguezpalacios (claushellsing@gmail.com)
+
+---
+
+# v0.0.2 (Tue Aug 27 2024)
+
 
 
 ---
