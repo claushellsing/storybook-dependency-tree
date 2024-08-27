@@ -14,3 +14,9 @@
 ## Dependencies
 - **Dependency Loading**: Powered by [node-dependency-tree](https://github.com/dependents/node-dependency-tree) to accurately map and load dependencies.
 - **Tree View**: Utilizes [MUI X](https://github.com/mui/mui-x) for a robust and interactive tree view experience.
+
+## Installation
+To install the addon, run the following command in your project directory:
+
+```bash
+npm i storybook-dependency-tree

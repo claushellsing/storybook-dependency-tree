@@ -86,7 +86,7 @@
     "zx": "^7.2.3"
   },
   "peerDependencies": {
-    "storybook": "^8.3.0 || 0.0.0-pr-26654-sha-49d01553"
+    "storybook": "^8.0.0"
   },
   "overrides": {
     "storybook": "0.0.0-pr-26654-sha-49d01553"
