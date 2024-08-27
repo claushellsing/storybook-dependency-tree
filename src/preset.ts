@@ -8,7 +8,8 @@ import { Parser } from 'acorn';
 import estraverse from 'estraverse';
 
 export interface ViteConfig {
-  plugins: Array<unknown>
+  plugins: Array<unknown>,
+  root: string,
 }
 
 // Function to determine if the file is a story file
@@ -49,6 +50,7 @@ export function viteDependencyPlugin(config: ViteConfig): Plugin {
         const tree = dependencyTree({
           filename: id,
           directory: basePath,
+          tsConfig:  `${config.root}/tsconfig.json`, //Todo: pass as parameter
           filter: (path: string) =>
             path.indexOf('node_modules') === -1 && path !== id && !path.endsWith('.css'),
         });
