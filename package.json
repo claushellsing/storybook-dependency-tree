@@ -5,7 +5,8 @@
   "keywords": [
     "dependency",
     "tree",
-    "storybook-addons"
+    "storybook-addons",
+    "dependencies"
   ],
   "repository": {
     "type": "git",
@@ -105,7 +106,7 @@
     ]
   },
   "storybook": {
-    "displayName": "dependency-tree",
+    "displayName": "Dependency Tree",
     "supportedFrameworks": [
       "react",
       "vue"
