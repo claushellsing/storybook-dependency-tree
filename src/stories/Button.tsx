@@ -1,7 +1,6 @@
 import React from 'react';
 import './button.css';
 import { ComponentB } from '../components/ComponentB';
-import { ComponentA } from '../components/ComponentA';
 
 interface ButtonProps {
   /**
@@ -39,7 +38,7 @@ export const Button = ({
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
   return (
     <div>
-      <ComponentA content='Sample1' />
+      <ComponentB label="Sample1" />
       <button
         type="button"
         className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}

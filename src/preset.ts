@@ -1,53 +1,65 @@
-import { Node } from "acorn";
-import { ADDON_ID } from "./constants";
-import type { Plugin } from "vite";
+import { ADDON_ID_BASE_KEY, ADDON_ID_DEP_TREE } from './constants';
+import type { Plugin } from 'vite';
+import type { ArrayExpression, Literal, VariableDeclarator } from 'acorn';
+import type { Node } from 'estree';
 
-const dependencyTree = require('dependency-tree');
-const { Parser } = require("acorn");
-const estraverse = require("estraverse");
+import dependencyTree from 'dependency-tree';
+import { Parser } from 'acorn';
+import estraverse from 'estraverse';
 
+export interface ViteConfig {
+  plugins: Array<unknown>
+}
 
-export function viteDependencyPlugin(config: any): Plugin {
-  // Function to determine if the file is a story file
-  const isUserStory = (path: string): boolean => ['.stories.ts', '.stories.js', '.stories.jsx', '.stories.tsx'].some(ext => path.endsWith(ext));
+// Function to determine if the file is a story file
+const isUserStory = (path: string): boolean =>
+  ['.stories.ts', '.stories.js', '.stories.jsx', '.stories.tsx'].some((ext) => path.endsWith(ext));
 
+export function viteDependencyPlugin(config: ViteConfig): Plugin {
   return {
     name: 'storybook-dependency-tree',
     enforce: 'post',
 
     transform(source, id) {
       let newSource = source;
+
       if (isUserStory(id)) {
-        const ast  = Parser.parse(source, { sourceType: 'module' });
+        const root = Parser.parse(source, {
+          sourceType: 'module',
+          ecmaVersion: 'latest',
+        });
+
         const storiesExported: string[] = [];
+        const basePath = process.cwd();
 
         //Detect the name of all exported stories
-        estraverse.traverse(ast, {
-          enter: function (node: Node, parent: Node) {
-              if ((node.type === 'Identifier') && (node.name === '__namedExportsOrder')) {
-                parent.init.elements.forEach(element => {
-                  storiesExported.push(element.value);
-                });
-              }
+        estraverse.traverse(root as Node, {
+          enter: function (node, parent) {
+            if (node.type === 'Identifier' && node.name === '__namedExportsOrder') {
+              const parentNode = parent as VariableDeclarator;
+
+              (parentNode.init as ArrayExpression).elements.forEach((element: Literal) => {
+                const literalValue = (element as Literal).value;
+                storiesExported.push(`${literalValue}`);
+              });
+            }
           },
         });
 
         const tree = dependencyTree({
           filename: id,
-          directory: process.cwd(),
-          filter: (path: string) => 
-            path.indexOf('node_modules') === -1 &&
-            path !== id && 
-            !path.endsWith('.css'),
+          directory: basePath,
+          filter: (path: string) =>
+            path.indexOf('node_modules') === -1 && path !== id && !path.endsWith('.css'),
         });
 
-        const dependencyTreeStatement = `var _DEPENDENCY_MAP_ = ${JSON.stringify(tree)};`
+        const dependencyTreeStatement = `var _DEPENDENCY_MAP_ = ${JSON.stringify(tree)};`;
         newSource = `${dependencyTreeStatement}\n${newSource}`;
 
-        storiesExported.forEach(storyName => {
-          newSource = `${newSource}\n${storyName}.parameters['${ADDON_ID}'] = _DEPENDENCY_MAP_;\n`;
+        storiesExported.forEach((storyName) => {
+          newSource = `${newSource}\n${storyName}.parameters['${ADDON_ID_DEP_TREE}'] = _DEPENDENCY_MAP_;\n`;
+          newSource = `${newSource}\n${storyName}.parameters['${ADDON_ID_BASE_KEY}'] = '${basePath}';\n`;
         });
-        
       }
 
       return { code: newSource, map: null };
@@ -55,18 +67,16 @@ export function viteDependencyPlugin(config: any): Plugin {
   };
 }
 
-export const viteFinal = async (config: any) => {
-  console.log("This addon is augmenting the Vite config");
+export const viteFinal = async (config: ViteConfig) => {
   return {
     ...config,
     plugins: [
       ...config.plugins,
-      viteDependencyPlugin(config),  // Plugin added here
-    ]
+      viteDependencyPlugin(config), // Plugin added here
+    ],
   };
 };
 
 export const webpack = async (config: any) => {
-  console.log("This addon is augmenting the Webpack config");
   return config;
 };

@@ -10,10 +10,10 @@ import { ADDON_ID, TAB_ID } from "./constants";
  */
 
 // Register the addon
-addons.register(ADDON_ID, (api) => {
+addons.register(ADDON_ID, () => {
   addons.add(TAB_ID, {
     type: types.TAB,
     title: "Dependency Tree",
-    render: ({ active }) => <Tab active={active} />,
+    render: () => <Tab />,
   });
 });
