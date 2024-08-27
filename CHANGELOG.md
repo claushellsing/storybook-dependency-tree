@@ -1,3 +1,15 @@
+# v0.0.5 (Tue Aug 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Load tsconfig ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.2 (Tue Aug 27 2024)
 
 #### ⚠️ Pushed to `main`
