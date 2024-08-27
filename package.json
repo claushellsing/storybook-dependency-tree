@@ -1,6 +1,6 @@
 {
   "name": "storybook-dependency-tree",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Storybook Dependency tree",
   "keywords": [
     "dependency",
