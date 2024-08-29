@@ -1,6 +1,7 @@
 import React from 'react';
 import './button.css';
 import { ComponentB } from '../components/ComponentB';
+import ComponentC from '../components/ComponentC';
 
 interface ButtonProps {
   /**
@@ -38,6 +39,7 @@ export const Button = ({
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
   return (
     <div>
+      <ComponentC label='Compoennt C' />
       <ComponentB label="Sample1" />
       <button
         type="button"

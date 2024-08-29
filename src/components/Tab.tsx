@@ -27,20 +27,37 @@ function collectIds(tree: TreeViewBaseItem[]): string[] {
   return ids;
 }
 
-function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
-  return Object.keys(input).map((key) => {
-    const id = `item-${globalCounter++}`; // Use the global counter to ensure uniqueness
+function isIndex(label: string) {
+  return (label === "index.ts" || label === "index.js")
+}
 
+function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
+  const result: Array<TreeViewBaseItem> = [];
+
+  for (const [key, value] of Object.entries(input)) {
+    // Extract id and label
+    const id = `item-${globalCounter++}`; // Use the global counter to ensure uniqueness
     const componentPath = key.replace(basePath, '').replace(/^\//, '');
     const label = componentPath.split('/').pop() || componentPath;
-    const children = transformTree(input[key], basePath);
 
-    return {
-      id,
-      label,
-      ...(children.length ? { children } : {}),
-    };
-  });
+    // Check if the label is "index.ts" or "index.js"
+    if (isIndex(label)) {
+      // If it's an index file, merge its children into the parent's children
+      const children = transformTree(value, basePath);
+      result.push(...children);
+    } else {
+      // Otherwise, process normally
+      const children = transformTree(value, basePath);
+
+      result.push({
+        id,
+        label,
+        ...(children.length ? { children } : {}),
+      });
+    }
+  }
+  
+  return result;
 }
 
 const TabWrapper = styled.div(({ theme }) => ({
