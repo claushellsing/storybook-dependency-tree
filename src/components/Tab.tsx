@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useParameter } from 'storybook/internal/manager-api';
 import { styled } from 'storybook/internal/theming';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
+import { useGlobals, useParameter } from '@storybook/manager-api';
+
 import { ADDON_ID_BASE_KEY, ADDON_ID_DEP_TREE } from '../constants';
 
 interface TreeViewBaseItem {
@@ -28,25 +29,21 @@ function collectIds(tree: TreeViewBaseItem[]): string[] {
 }
 
 function isIndex(label: string) {
-  return (label === "index.ts" || label === "index.js")
+  return label === 'index.ts' || label === 'index.js';
 }
 
 function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
   const result: Array<TreeViewBaseItem> = [];
 
   for (const [key, value] of Object.entries(input)) {
-    // Extract id and label
     const id = `item-${globalCounter++}`; // Use the global counter to ensure uniqueness
     const componentPath = key.replace(basePath, '').replace(/^\//, '');
     const label = componentPath.split('/').pop() || componentPath;
 
-    // Check if the label is "index.ts" or "index.js"
     if (isIndex(label)) {
-      // If it's an index file, merge its children into the parent's children
       const children = transformTree(value, basePath);
       result.push(...children);
     } else {
-      // Otherwise, process normally
       const children = transformTree(value, basePath);
 
       result.push({
@@ -56,7 +53,7 @@ function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
       });
     }
   }
-  
+
   return result;
 }
 
@@ -74,18 +71,22 @@ const TabInner = styled.div({
 });
 
 export const Tab: React.FC = () => {
-  const paramTreeDep = useParameter(ADDON_ID_DEP_TREE);
-  const paramBasePath: string = useParameter(ADDON_ID_BASE_KEY);
+  const [globals] = useGlobals();
+
+  const paramBasePath: string = globals['storybook_dependency_map_base_path'];
+  const currentStoryPath = useParameter('story_absolute_path');
   const [parsedTreeDep, setParsedTreeDep] = useState<Array<TreeViewBaseItem>>([]);
   const [expandedIds, setExpandedIds] = useState<Array<string>>([]);
 
   useEffect(() => {
-      if(paramTreeDep) {
-        const transformedTree = transformTree(paramTreeDep, paramBasePath);
-        setParsedTreeDep(transformedTree);
-        setExpandedIds(collectIds(transformedTree));
-      }
-  }, [paramTreeDep, paramBasePath]);
+    const paramTreeDep = globals['storybook_dependency_map'][currentStoryPath];
+
+    if (paramTreeDep) {
+      const transformedTree = transformTree(paramTreeDep, paramBasePath);
+      setParsedTreeDep(transformedTree);
+      setExpandedIds(collectIds(transformedTree));
+    }
+  }, [currentStoryPath, paramBasePath]);
 
   return (
     <TabWrapper>
