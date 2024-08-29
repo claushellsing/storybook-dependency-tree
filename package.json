@@ -22,7 +22,7 @@
       "require": "./dist/index.cjs"
     },
     "./preview": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/preview.d.ts",
       "import": "./dist/preview.js",
       "require": "./dist/preview.cjs"
     },
