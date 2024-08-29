@@ -127,7 +127,3 @@ export const webpack = async (config: any) => {
 export const managerEntries = (entry: Array<unknown> = []) => {
   return [...entry, require.resolve('../dist/manager.js')];
 };
-
-export const previewAnnotations = (entry: Array<unknown> = []) => {
-  return [...entry, require.resolve('../dist/preview.js')];
-};
