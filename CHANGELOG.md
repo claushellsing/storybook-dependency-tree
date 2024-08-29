@@ -1,5 +1,19 @@
 # v0.0.6 (Wed Aug 28 2024)
 
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:claushellsing/storybook-dependency-tree ([@claushellsing](https://github.com/claushellsing))
+- Ignore index files like index.ts or index.js ([@claushellsing](https://github.com/claushellsing))
+- Update README.md ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
+# v0.0.6 (Wed Aug 28 2024)
+
 
 
 ---
