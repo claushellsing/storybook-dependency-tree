@@ -1,3 +1,15 @@
+# v0.0.7 (Thu Aug 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Change Algorithm to load all the dependencies once and make them visible using global . WIP to load dependents per story ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.6 (Wed Aug 28 2024)
 
 #### ⚠️ Pushed to `main`
