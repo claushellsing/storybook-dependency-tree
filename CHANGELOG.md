@@ -1,3 +1,15 @@
+# v0.0.10 (Thu Aug 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix dependency generation algorithm ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.9 (Thu Aug 29 2024)
 
 #### ⚠️ Pushed to `main`
