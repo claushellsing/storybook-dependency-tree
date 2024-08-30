@@ -101,8 +101,7 @@
   },
   "bundler": {
     "exportEntries": [
-      "src/index.ts",
-      "src/storybook-dependency-tree.ts"
+      "src/index.ts"
     ],
     "managerEntries": [
       "src/manager.tsx"

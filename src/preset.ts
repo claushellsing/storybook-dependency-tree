@@ -25,7 +25,6 @@ function getStoryDependencies(storyPath: string) {
     filter: (path: string) =>
       path.indexOf('node_modules') === -1 && path !== storyPath && !path.endsWith('.css'),
   }) as Record<string, any>;
-
   return tree[storyPath] as object;
 }
 
@@ -36,6 +35,22 @@ export function viteDependencyPlugin(config: ViteConfig): Plugin {
 
     transform(source, id) {
       let newSource = source;
+
+      //Trasnform vite padd
+      if (id === '/virtual:/@storybook/builder-vite/vite-app.js') {
+        newSource = newSource.replace(
+          `{ importFn }`,
+          `{ importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH }`
+        );
+        newSource = newSource.replaceAll(
+          'return composeConfigs(configs);',
+          `const composedConfigs  = composeConfigs(configs);
+          composedConfigs.initialGlobals.storybook_dependency_map = STORYBOOK_DEPENDENCY_MAP;
+          composedConfigs.initialGlobals.storybook_dependency_map_base_path = STORYBOOK_DEPENDENCY_MAP_BASE_PATH;
+          return composedConfigs;
+          `,
+        );
+      };
 
       //List of stories and dependencies
       if (id === '/virtual:/@storybook/builder-vite/storybook-stories.js') {
@@ -64,18 +79,6 @@ export function viteDependencyPlugin(config: ViteConfig): Plugin {
 
         newSource = `${newSource}\nexport const STORYBOOK_DEPENDENCY_MAP = ${JSON.stringify(storiesDependencies)};\n`;
         newSource = `${newSource}\nexport const STORYBOOK_DEPENDENCY_MAP_BASE_PATH = "${basePath}";\n`;
-      }
-
-      //Add dependency map to globals
-      if (id.endsWith('storybook-dependency-tree/dist/preview.js')) {
-        newSource = newSource.replace(
-          'storybook_dependency_map: {}',
-          `storybook_dependency_map: ${JSON.stringify(storiesDependencies)}`
-        );
-        newSource = newSource.replace(
-          'storybook_dependency_map_base_path: ""',
-          `storybook_dependency_map_base_path: "${basePath}"`
-        );
       }
 
       //Add file related to every story
@@ -122,8 +125,4 @@ export const viteFinal = async (config: ViteConfig) => {
 
 export const webpack = async (config: any) => {
   return config;
-};
-
-export const managerEntries = (entry: Array<unknown> = []) => {
-  return [...entry, require.resolve('../dist/manager.js')];
 };
