@@ -33,7 +33,30 @@ const collectIds = (tree: TreeViewBaseItem[]): string[] => {
 };
 
 const isIndex = (label: string): boolean => {
-  return label === 'index.ts' || label === 'index.js';
+  return label.endsWith('index.ts') || label.endsWith('index.js');
+};
+
+const filterTree = (nodes: TreeViewBaseItem[]): TreeViewBaseItem[] => {
+  return nodes.reduce((filtered, node) => {
+    // If the current node's label is not 'index.ts' or 'index.js', add it to the filtered list
+    if (!isIndex(node.label)) {
+      const newNode = { ...node };
+      
+      // Recursively filter children
+      if (newNode.children && newNode.children.length > 0) {
+        newNode.children = filterTree(newNode.children);
+      }
+      
+      filtered.push(newNode);
+    } else {
+      // If the node is an index file, push its children to the filtered list instead
+      if (node.children && node.children.length > 0) {
+        filtered.push(...filterTree(node.children));
+      }
+    }
+
+    return filtered;
+  }, []);
 };
 
 const transformTree = (input: Record<string, any>, basePath: string = ''): TreeViewBaseItem[] => {
@@ -44,19 +67,14 @@ const transformTree = (input: Record<string, any>, basePath: string = ''): TreeV
     const componentPath = key.replace(basePath, '').replace(/^\//, '');
     const label = componentPath;
 
-    if (isIndex(label)) {
-      const children = transformTree(value, basePath);
-      result.push(...children);
-    } else {
-      const children = transformTree(value, basePath);
+    const children = transformTree(value, basePath);
 
-      result.push({
-        id,
-        label,
-        fullPath: key,
-        ...(children.length ? { children } : {}),
-      });
-    }
+    result.push({
+      id,
+      label,
+      fullPath: key,
+      ...(children.length ? { children } : {}),
+    });
   }
 
   return result;
@@ -121,7 +139,7 @@ export const Tab: React.FC = () => {
 
   const paramBasePath: string = globals['storybook_dependency_map_base_path'];
   const currentStoryPath = useParameter<string>('story_absolute_path');
-  const [parsedTreeDep, setParsedTreeDep] = useState<TreeViewBaseItem[]>([]);
+  const [dependencies, setDependencies] = useState<TreeViewBaseItem[]>([]);
   const [dependants, setDependants] = useState<TreeViewBaseItem[]>([]);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
@@ -131,9 +149,9 @@ export const Tab: React.FC = () => {
     const currentDependencyMap = globalDependencyMap[currentStoryPath];
 
     if (currentDependencyMap) {
-      const transformedTree = transformTree(currentDependencyMap, paramBasePath);
+      const dependenciesTree = transformTree(currentDependencyMap, paramBasePath);
 
-      const dependants = transformedTree
+      const dependants = dependenciesTree
         .map((node) => node.fullPath)
         .reduce<TreeViewBaseItem[]>((acc, componentPath) => {
           const componentDependants = findAllImmediateParentPaths(
@@ -145,9 +163,9 @@ export const Tab: React.FC = () => {
           return [...acc, ...componentDependants];
         }, []);
 
-      setDependants(dependants);
-      setParsedTreeDep(transformedTree);
-      setExpandedIds(collectIds(transformedTree));
+      setDependants(filterTree(dependants));
+      setDependencies(filterTree(dependenciesTree));
+      setExpandedIds(collectIds(dependenciesTree));
     }
   }, [currentStoryPath, paramBasePath, globals]);
 
@@ -159,7 +177,7 @@ export const Tab: React.FC = () => {
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ ml: 2 }}>
-          <RichTreeView items={parsedTreeDep} expandedItems={expandedIds} />
+          <RichTreeView items={dependencies} expandedItems={expandedIds} />
         </Box>
         <br />
         <Typography variant="h5" component="div" gutterBottom>
