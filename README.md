@@ -5,7 +5,7 @@
 
 > **Note:** This project is a work in progress and is actively being developed.
 
-![Dependency Tree Preview](https://github.com/user-attachments/assets/7c9e4b1b-eb82-4eb7-a8e7-ca015b6e2636)
+![Dependency Tree Preview](https://github.com/user-attachments/assets/b8fdb45b-b6dd-4e42-bcf7-983824b098bf)
 
 ## Features
 - **Visual Dependency Mapping**: Automatically loads and displays all dependencies for the currently open story, providing a clear and structured view similar to [storybook-addon-deps](https://storybook.js.org/addons/storybook-addon-deps).
