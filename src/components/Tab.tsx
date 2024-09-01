@@ -123,13 +123,13 @@ const findAllImmediateParentPaths = (
 
 const TabWrapper = styled('div')(({ theme }) => ({
   background: theme.background.content,
-  padding: '4rem 20px',
+  padding: '4rem 10px',
   minHeight: '100vh',
   boxSizing: 'border-box',
 }));
 
 const TabInner = styled('div')({
-  maxWidth: 768,
+  minWidth: 768,
   marginLeft: 'auto',
   marginRight: 'auto',
 });
