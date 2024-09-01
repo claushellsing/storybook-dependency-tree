@@ -1,3 +1,16 @@
+# v0.0.11 (Sun Sep 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update Readme ([@claushellsing](https://github.com/claushellsing))
+- Add option to display dependants ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.10 (Thu Aug 29 2024)
 
 #### ⚠️ Pushed to `main`
