@@ -2,6 +2,22 @@
 
 #### ⚠️ Pushed to `main`
 
+- Merge branch 'main' of github.com:claushellsing/storybook-dependency-tree (claushellsing@gmail.com)
+- Update README.md ([@claushellsing](https://github.com/claushellsing))
+- Update Readme ([@claushellsing](https://github.com/claushellsing))
+- Add option to display dependants ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 2
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+- rainerelirodriguezpalacios (claushellsing@gmail.com)
+
+---
+
+# v0.0.11 (Sun Sep 01 2024)
+
+#### ⚠️ Pushed to `main`
+
 - Update Readme ([@claushellsing](https://github.com/claushellsing))
 - Add option to display dependants ([@claushellsing](https://github.com/claushellsing))
 
