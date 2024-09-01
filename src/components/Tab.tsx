@@ -1,44 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { styled } from 'storybook/internal/theming';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { useGlobals, useParameter } from '@storybook/manager-api';
 
-import { ADDON_ID_BASE_KEY, ADDON_ID_DEP_TREE } from '../constants';
-
-interface TreeViewBaseItem {
+interface TreeNode {
   id: string;
   label: string;
+  fullPath: string;
+}
+
+interface TreeViewBaseItem extends TreeNode {
   children?: TreeViewBaseItem[];
 }
 
 let globalCounter = 0;
 
-function collectIds(tree: TreeViewBaseItem[]): string[] {
-  let ids: string[] = [];
+const collectIds = (tree: TreeViewBaseItem[]): string[] => {
+  const ids: string[] = [];
 
-  function traverse(node: TreeViewBaseItem) {
+  const traverse = (node: TreeViewBaseItem) => {
     ids.push(node.id);
     if (node.children) {
       node.children.forEach(traverse);
     }
-  }
+  };
 
   tree.forEach(traverse);
   return ids;
-}
+};
 
-function isIndex(label: string) {
+const isIndex = (label: string): boolean => {
   return label === 'index.ts' || label === 'index.js';
-}
+};
 
-function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
-  const result: Array<TreeViewBaseItem> = [];
+const transformTree = (input: Record<string, any>, basePath: string = ''): TreeViewBaseItem[] => {
+  const result: TreeViewBaseItem[] = [];
 
   for (const [key, value] of Object.entries(input)) {
     const id = `item-${globalCounter++}`; // Use the global counter to ensure uniqueness
     const componentPath = key.replace(basePath, '').replace(/^\//, '');
-    const label = componentPath.split('/').pop() || componentPath;
+    const label = componentPath;
 
     if (isIndex(label)) {
       const children = transformTree(value, basePath);
@@ -49,22 +53,64 @@ function transformTree(input: any, basePath: string = ''): TreeViewBaseItem[] {
       result.push({
         id,
         label,
+        fullPath: key,
         ...(children.length ? { children } : {}),
       });
     }
   }
 
   return result;
-}
+};
 
-const TabWrapper = styled.div(({ theme }) => ({
+const findAllImmediateParentPaths = (
+  tree: Record<string, any>,
+  targetFullPath: string,
+  ignorePaths: string[] = [],
+  basePath: string
+): TreeViewBaseItem[] => {
+  const result: TreeViewBaseItem[] = [];
+  const foundPaths = new Set<string>();
+
+  const traverse = (currentNode: Record<string, any>) => {
+    for (const fullPath in currentNode) {
+      if (Object.prototype.hasOwnProperty.call(currentNode, fullPath)) {
+        const children = currentNode[fullPath];
+        if (
+          Object.prototype.hasOwnProperty.call(children, targetFullPath) &&
+          !ignorePaths.includes(fullPath) &&
+          !foundPaths.has(fullPath)
+        ) {
+          foundPaths.add(fullPath);
+          result.push({
+            id: `dep-${globalCounter++}`,
+            label: fullPath.replace(basePath, '').replace(/^\//, ''),
+            fullPath,
+            children: [],
+          });
+        }
+        traverse(children);
+      }
+    }
+  };
+
+  traverse(tree);
+
+  for (const key in result) {
+    const node = result[key];
+    node.children = findAllImmediateParentPaths(tree, node.fullPath, ignorePaths, basePath);
+  }
+
+  return result;
+};
+
+const TabWrapper = styled('div')(({ theme }) => ({
   background: theme.background.content,
   padding: '4rem 20px',
   minHeight: '100vh',
   boxSizing: 'border-box',
 }));
 
-const TabInner = styled.div({
+const TabInner = styled('div')({
   maxWidth: 768,
   marginLeft: 'auto',
   marginRight: 'auto',
@@ -74,25 +120,54 @@ export const Tab: React.FC = () => {
   const [globals] = useGlobals();
 
   const paramBasePath: string = globals['storybook_dependency_map_base_path'];
-  const currentStoryPath = useParameter('story_absolute_path');
-  const [parsedTreeDep, setParsedTreeDep] = useState<Array<TreeViewBaseItem>>([]);
-  const [expandedIds, setExpandedIds] = useState<Array<string>>([]);
+  const currentStoryPath = useParameter<string>('story_absolute_path');
+  const [parsedTreeDep, setParsedTreeDep] = useState<TreeViewBaseItem[]>([]);
+  const [dependants, setDependants] = useState<TreeViewBaseItem[]>([]);
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
   useEffect(() => {
-    const paramTreeDep = globals['storybook_dependency_map'][currentStoryPath];
+    const globalDependencyMap = globals['storybook_dependency_map'];
+    const storiesList = globals['stories_list'];
+    const currentDependencyMap = globalDependencyMap[currentStoryPath];
 
-    if (paramTreeDep) {
-      const transformedTree = transformTree(paramTreeDep, paramBasePath);
+    if (currentDependencyMap) {
+      const transformedTree = transformTree(currentDependencyMap, paramBasePath);
+
+      const dependants = transformedTree
+        .map((node) => node.fullPath)
+        .reduce<TreeViewBaseItem[]>((acc, componentPath) => {
+          const componentDependants = findAllImmediateParentPaths(
+            globalDependencyMap,
+            componentPath,
+            storiesList,
+            paramBasePath
+          );
+          return [...acc, ...componentDependants];
+        }, []);
+
+      setDependants(dependants);
       setParsedTreeDep(transformedTree);
       setExpandedIds(collectIds(transformedTree));
     }
-  }, [currentStoryPath, paramBasePath]);
+  }, [currentStoryPath, paramBasePath, globals]);
 
   return (
     <TabWrapper>
       <TabInner>
-        <Box sx={{ minHeight: 352, minWidth: 250 }}>
+        <Typography variant="h5" component="div" gutterBottom>
+          Dependencies
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ ml: 2 }}>
           <RichTreeView items={parsedTreeDep} expandedItems={expandedIds} />
+        </Box>
+        <br />
+        <Typography variant="h5" component="div" gutterBottom>
+          Dependendants
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ mb: 4, border: '1px solid #ccc', borderRadius: 1, p: 2 }}>
+          <RichTreeView items={dependants} />
         </Box>
       </TabInner>
     </TabWrapper>
