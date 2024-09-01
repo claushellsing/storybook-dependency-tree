@@ -1,15 +1,18 @@
 # Storybook Addon: Dependency Tree
 
 ## Overview
-**Storybook Dependency Tree** is an addon for Storybook that visualizes the dependency hierarchy of each story in a tree view. This tool helps developers understand and navigate the dependencies associated with their stories more efficiently.
+**Storybook Dependency Tree** is a Storybook addon that visualizes the dependency hierarchy of each story in a tree view. This tool helps developers better understand and navigate the dependencies and dependents associated with their stories, making the development process more efficient.
 
-> **Note:** This project is a work in progress and is under active development.
+> **Note:** This project is a work in progress and is actively being developed.
 
-![CleanShot 2024-08-27 at 01 50 02@2x](https://github.com/user-attachments/assets/7c9e4b1b-eb82-4eb7-a8e7-ca015b6e2636)
+![Dependency Tree Preview](https://github.com/user-attachments/assets/7c9e4b1b-eb82-4eb7-a8e7-ca015b6e2636)
 
 ## Features
-- **Visual Dependency Mapping**: Automatically load and display all dependencies for the currently open story, providing a clear and structured view similar to [storybook-addon-deps](https://storybook.js.org/addons/storybook-addon-deps).
-- **Seamless Integration**: Integrates seamlessly with Storybook, enhancing your development workflow.
+- **Visual Dependency Mapping**: Automatically loads and displays all dependencies for the currently open story, providing a clear and structured view similar to [storybook-addon-deps](https://storybook.js.org/addons/storybook-addon-deps).
+- **Dependents Visualization**: In addition to dependencies, the addon also displays all dependents, helping you see which components rely on the current story.
+- **Seamless Integration**: Integrates smoothly with Storybook, enhancing your development workflow.
+- **Runtime Execution**: Runs at runtime without requiring any additional commands.
+- **Zero Configuration**: No configuration is needed to get started.
 
 ## Dependencies
 - **Dependency Loading**: Powered by [node-dependency-tree](https://github.com/dependents/node-dependency-tree) to accurately map and load dependencies.
@@ -20,14 +23,3 @@ To install the addon, run the following command in your project directory:
 
 ```bash
 npm i storybook-dependency-tree
-```
-
-After installation, add 'storybook-dependency-tree' to the addons property inside your main Storybook configuration file (e.g., main.js):
-
-```javascript
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: [
-    ...
-    "storybook-dependency-tree",
-  ],
-```
