@@ -1,3 +1,15 @@
+# v0.0.15 (Sun Sep 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Adjust style ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.14 (Sun Sep 01 2024)
 
 #### ⚠️ Pushed to `main`
