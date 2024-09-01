@@ -1,3 +1,15 @@
+# v0.0.14 (Sun Sep 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Removing index.ts and index.js files (claushellsing@gmail.com)
+
+#### Authors: 1
+
+- rainerelirodriguezpalacios (claushellsing@gmail.com)
+
+---
+
 # v0.0.11 (Sun Sep 01 2024)
 
 #### ⚠️ Pushed to `main`
