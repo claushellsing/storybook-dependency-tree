@@ -1,3 +1,15 @@
+# v0.0.17 (Mon Sep 02 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.16 (Sun Sep 01 2024)
 
 #### ⚠️ Pushed to `main`
