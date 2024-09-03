@@ -1,3 +1,15 @@
+# v0.0.18 (Tue Sep 03 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Improve using memo for loading dependencies ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.17 (Mon Sep 02 2024)
 
 #### ⚠️ Pushed to `main`
