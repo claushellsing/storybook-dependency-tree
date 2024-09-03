@@ -23,3 +23,14 @@ To install the addon, run the following command in your project directory:
 
 ```bash
 npm i storybook-dependency-tree
+```
+
+After installation, add 'storybook-dependency-tree' to the addons property inside your main Storybook configuration file (e.g., main.js):
+
+```javascript
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
+  addons: [
+    ...
+    "storybook-dependency-tree",
+  ],
+```
