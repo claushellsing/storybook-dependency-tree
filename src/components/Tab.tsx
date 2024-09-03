@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -143,7 +143,7 @@ export const Tab: React.FC = () => {
   const [dependants, setDependants] = useState<TreeViewBaseItem[]>([]);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
-  useEffect(() => {
+  useMemo(() => {
     const globalDependencyMap = globals['storybook_dependency_map'];
     const storiesList = globals['stories_list'];
     const currentDependencyMap = globalDependencyMap[currentStoryPath];
