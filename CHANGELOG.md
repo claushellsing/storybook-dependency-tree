@@ -1,3 +1,17 @@
+# v0.0.19 (Mon Jan 20 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of github.com:claushellsing/storybook-dependency-tree ([@claushellsing](https://github.com/claushellsing))
+- Fix plugin post & pre sync ([@claushellsing](https://github.com/claushellsing))
+- project setup ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.18 (Tue Sep 03 2024)
 
 #### ⚠️ Pushed to `main`
