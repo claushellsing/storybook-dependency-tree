@@ -28,30 +28,13 @@ function getStoryDependencies(storyPath: string) {
   return tree[storyPath] as object;
 }
 
-export function viteDependencyPlugin(config: ViteConfig): Plugin {
+export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
   return {
     name: 'storybook-dependency-tree',
-    enforce: 'post',
+    enforce: 'pre',
 
     transform(source, id) {
       let newSource = source;
-
-      //Trasnform vite padd
-      if (id === '/virtual:/@storybook/builder-vite/vite-app.js') {
-        newSource = newSource.replace(
-          `{ importFn }`,
-          `{ importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH, STORIES_LIST }`
-        );
-        newSource = newSource.replaceAll(
-          'return composeConfigs(configs);',
-          `const composedConfigs  = composeConfigs(configs);
-          composedConfigs.initialGlobals.storybook_dependency_map = STORYBOOK_DEPENDENCY_MAP;
-          composedConfigs.initialGlobals.storybook_dependency_map_base_path = STORYBOOK_DEPENDENCY_MAP_BASE_PATH;
-          composedConfigs.initialGlobals.stories_list = STORIES_LIST;
-          return composedConfigs;
-          `
-        );
-      }
 
       //List of stories and dependencies
       if (id === '/virtual:/@storybook/builder-vite/storybook-stories.js') {
@@ -82,6 +65,36 @@ export function viteDependencyPlugin(config: ViteConfig): Plugin {
         newSource = `${newSource}\nexport const STORYBOOK_DEPENDENCY_MAP_BASE_PATH = "${basePath}";\n`;
         newSource = `${newSource}\nexport const STORIES_LIST = ${JSON.stringify(storiesFilePaths)};\n`;
       }
+
+      // Trasnform vite padd
+      if (id === '/virtual:/@storybook/builder-vite/vite-app.js') {
+        newSource = newSource.replace(
+          `{ importFn }`,
+          `{ importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH, STORIES_LIST }`
+        );
+        newSource = newSource.replaceAll(
+          'return composeConfigs(configs);',
+          `const composedConfigs  = composeConfigs(configs);
+          composedConfigs.initialGlobals.storybook_dependency_map = STORYBOOK_DEPENDENCY_MAP;
+          composedConfigs.initialGlobals.storybook_dependency_map_base_path = STORYBOOK_DEPENDENCY_MAP_BASE_PATH;
+          composedConfigs.initialGlobals.stories_list = STORIES_LIST;
+          return composedConfigs;
+          `
+        );
+      }
+
+      return { code: newSource, map: null };
+    },
+  };
+}
+
+export function vitePostTreeDependencyPlugin(config: ViteConfig): Plugin {
+  return {
+    name: 'storybook-dependency-tree',
+    enforce: 'post',
+
+    transform(source, id) {
+      let newSource = source;
 
       //Add file related to every story
       if (isUserStory(id)) {
@@ -120,7 +133,8 @@ export const viteFinal = async (config: ViteConfig) => {
     ...config,
     plugins: [
       ...config.plugins,
-      viteDependencyPlugin(config), // Plugin added here
+      vitePreTreeDependencyPlugin(config),
+      vitePostTreeDependencyPlugin(config),
     ],
   };
 };
