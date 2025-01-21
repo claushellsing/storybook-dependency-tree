@@ -1,11 +1,15 @@
 {
   "name": "storybook-dependency-tree",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "Storybook Dependency tree",
   "keywords": [
     "dependency",
     "tree",
-    "storybook-addons", "dependency", "tree", "dependencies", "storybook-addons",
+    "storybook-addons",
+    "dependency",
+    "tree",
+    "dependencies",
+    "storybook-addons",
     "dependencies"
   ],
   "repository": {
