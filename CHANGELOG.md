@@ -1,3 +1,15 @@
+# v0.0.21 (Tue Jan 21 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Replace compare with localCompare ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.19 (Mon Jan 20 2025)
 
 #### ⚠️ Pushed to `main`
