@@ -37,7 +37,7 @@ export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
       let newSource = source;
 
       //List of stories and dependencies
-      if (id === '/virtual:/@storybook/builder-vite/storybook-stories.js') {
+      if (id.localeCompare('/virtual:/@storybook/builder-vite/storybook-stories.js') === 0) {
         const storiesFilePaths: Array<string> = [];
 
         const root = Parser.parse(source, {
@@ -67,7 +67,7 @@ export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
       }
 
       // Trasnform vite padd
-      if (id === '/virtual:/@storybook/builder-vite/vite-app.js') {
+      if (id.localeCompare('/virtual:/@storybook/builder-vite/vite-app.js') === 0) {
         newSource = newSource.replace(
           `{ importFn }`,
           `{ importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH, STORIES_LIST }`
