@@ -9,9 +9,12 @@ const preview: Preview = {
       },
     },
   },
+
   initialGlobals: {
     background: { value: "light" },
   },
+
+  tags: ["autodocs"]
 };
 
 export default preview;

@@ -1,9 +1,8 @@
 import type { Plugin } from 'vite';
-import type { Node } from 'estree';
 
 import dependencyTree from 'dependency-tree';
-import { Parser } from 'acorn';
-import estraverse from 'estraverse';
+import { parse } from '@typescript-eslint/parser';
+import { traverse } from 'estraverse';
 
 const storiesDependencies: Record<string, object> = {};
 
@@ -36,25 +35,38 @@ export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
     transform(source, id) {
       let newSource = source;
 
-      //List of stories and dependencies
-      if (id.localeCompare('/virtual:/@storybook/builder-vite/storybook-stories.js') === 0) {
-        const storiesFilePaths: Array<string> = [];
+      //Add file related to every story
+      if (isUserStory(id)) {
+        const sourceRoot = parse(source);
 
-        const root = Parser.parse(source, {
-          sourceType: 'module',
-          ecmaVersion: 'latest',
+        const storiesExported = sourceRoot.body.filter((statement) => {
+          return statement.type === 'ExportNamedDeclaration';
+        }).map((ExportNamedDeclaration) => {
+            return ExportNamedDeclaration.declaration.declarations[0].id.name;
         });
 
-        estraverse.traverse(root as Node, {
-          enter: function (node) {
-            // Check if the node is a Literal and its value matches the pattern
-            if (node.type === 'Literal' && typeof node.value === 'string') {
-              const value = node.value;
-              if (value.startsWith('/@fs/') && isUserStory(value)) {
-                storiesFilePaths.push(value.replace('/@fs/', ''));
+        storiesExported.forEach((storyName) => {
+          newSource = `${newSource}\n${storyName}.parameters['story_absolute_path'] = "${id}";\n`;
+        });
+      }
+
+      //List of stories and dependencies
+      if (id.endsWith('virtual:/@storybook/builder-vite/storybook-stories.js')) {
+        const storiesFilePaths: Array<string> = [];
+        const sourceRoot = parse(source);
+
+        // Traverse the AST
+        traverse(sourceRoot, {
+          enter: function(node) {
+            // Look for ImportExpression nodes (dynamic import())
+            if (node.type === 'ImportExpression' && node.source.type === 'Literal') {
+              const path = node.source.value;
+              // Check if it's an absolute path (starts with /)
+              if (path.startsWith('/')) {
+                storiesFilePaths.push(path);
               }
             }
-          },
+          }
         });
 
         storiesFilePaths.forEach((storyPath: string) => {
@@ -67,60 +79,24 @@ export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
       }
 
       // Trasnform vite padd
-      if (id.localeCompare('/virtual:/@storybook/builder-vite/vite-app.js') === 0) {
-        newSource = newSource.replace(
-          `{ importFn }`,
-          `{ importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH, STORIES_LIST }`
-        );
+      if (id.endsWith('virtual:/@storybook/builder-vite/vite-app.js')) {
+
+        const regex = /import\s*{\s*importFn\s*}\s*from\s*['"]([^'"]+)['"];?/;
+        const replacement = `import { importFn, STORYBOOK_DEPENDENCY_MAP, STORYBOOK_DEPENDENCY_MAP_BASE_PATH, STORIES_LIST } from '$1';
+        const dependencyComposeConfigs = (configs) => {
+          const previewConfigs = composeConfigs(configs); 
+          previewConfigs.initialGlobals.storybook_dependency_map = STORYBOOK_DEPENDENCY_MAP;
+          previewConfigs.initialGlobals.storybook_dependency_map_base_path = STORYBOOK_DEPENDENCY_MAP_BASE_PATH;
+          previewConfigs.initialGlobals.stories_list = STORIES_LIST;          
+          return previewConfigs;
+        }
+        `;  
+
+        newSource = newSource.replace(regex, replacement);
         newSource = newSource.replaceAll(
-          'return composeConfigs(configs);',
-          `const composedConfigs  = composeConfigs(configs);
-          composedConfigs.initialGlobals.storybook_dependency_map = STORYBOOK_DEPENDENCY_MAP;
-          composedConfigs.initialGlobals.storybook_dependency_map_base_path = STORYBOOK_DEPENDENCY_MAP_BASE_PATH;
-          composedConfigs.initialGlobals.stories_list = STORIES_LIST;
-          return composedConfigs;
-          `
+          'return composeConfigs',
+          'return dependencyComposeConfigs'
         );
-      }
-
-      return { code: newSource, map: null };
-    },
-  };
-}
-
-export function vitePostTreeDependencyPlugin(config: ViteConfig): Plugin {
-  return {
-    name: 'storybook-dependency-tree',
-    enforce: 'post',
-
-    transform(source, id) {
-      let newSource = source;
-
-      //Add file related to every story
-      if (isUserStory(id)) {
-        const root = Parser.parse(source, {
-          sourceType: 'module',
-          ecmaVersion: 'latest',
-        });
-
-        const storiesExported: string[] = [];
-
-        //Detect the name of all exported stories
-        estraverse.traverse(root as Node, {
-          enter: function (node, parent) {
-            if (node.type === 'Identifier' && node.name === '__namedExportsOrder') {
-              const parentNode = parent;
-              parentNode.init.elements.forEach((element) => {
-                const literalValue = element.value;
-                storiesExported.push(`${literalValue}`);
-              });
-            }
-          },
-        });
-
-        storiesExported.forEach((storyName) => {
-          newSource = `${newSource}\n${storyName}.parameters['story_absolute_path'] = "${id}";\n`;
-        });
       }
 
       return { code: newSource, map: null };
@@ -134,7 +110,6 @@ export const viteFinal = async (config: ViteConfig) => {
     plugins: [
       ...config.plugins,
       vitePreTreeDependencyPlugin(config),
-      vitePostTreeDependencyPlugin(config),
     ],
   };
 };
