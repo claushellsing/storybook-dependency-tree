@@ -66,6 +66,3 @@ export const Small: Story = {
     label: "Button",
   },
 };
-
-
-//meta.globals['sdd'] = "xxxxx";
