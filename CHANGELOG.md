@@ -2,6 +2,19 @@
 
 #### ⚠️ Pushed to `main`
 
+- Remove scafolding (claushellsing@gmail.com)
+- - Updating to Version 8.6 (claushellsing@gmail.com)
+
+#### Authors: 1
+
+- rainerelirodriguezpalacios (claushellsing@gmail.com)
+
+---
+
+# v0.0.22 (Thu Mar 06 2025)
+
+#### ⚠️ Pushed to `main`
+
 - - Updating to Version 8.6 (claushellsing@gmail.com)
 
 #### Authors: 1
