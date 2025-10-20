@@ -16,11 +16,7 @@ import type { ProjectAnnotations, Renderer } from "storybook/internal/types";
  */
 
 const preview: ProjectAnnotations<Renderer> = {
-  initialGlobals: {
-    storybook_dependency_map: {},
-    storybook_dependency_map_base_path: "",
-    stories_list: [],
-  },
+  initialGlobals: {},
 };
 
 export default preview;

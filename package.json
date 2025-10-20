@@ -66,15 +66,9 @@
     "styled-components": "^6.1.12"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.5",
-    "@storybook/addon-essentials": "^8.6.4",
-    "@storybook/addon-interactions": "^8.6.4",
-    "@storybook/addon-links": "^8.6.4",
-    "@storybook/addon-mdx-gfm": "^8.6.4",
-    "@storybook/blocks": "^8.6.4",
-    "@storybook/react": "^8.6.4",
-    "@storybook/react-vite": "^8.6.4",
-    "@storybook/test": "^8.6.4",
+    "@chromatic-com/storybook": "^4.1.1",
+    "@storybook/addon-links": "^9.1.12",
+    "@storybook/react-vite": "^9.1.12",
     "@types/node": "^18.15.0",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.21",
@@ -88,14 +82,15 @@
     "prompts": "^2.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "storybook": "^8.6.4",
+    "storybook": "^9.1.12",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
     "vite": "^5.3.5",
-    "zx": "^7.2.3"
+    "zx": "^7.2.3",
+    "@storybook/addon-docs": "^9.1.12"
   },
   "peerDependencies": {
-    "storybook": "^8.3.0"
+    "storybook": "^9.1.12"
   },
   "publishConfig": {
     "access": "public"
