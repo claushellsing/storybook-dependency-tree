@@ -1,3 +1,18 @@
+# v0.0.25 (Mon Oct 20 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge remote-tracking branch 'origin/main' ([@claushellsing](https://github.com/claushellsing))
+- Improve efficiency using useMemo ([@claushellsing](https://github.com/claushellsing))
+- Update README.md ([@claushellsing](https://github.com/claushellsing))
+- Add note for storybook 8.x users ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.24 (Mon Oct 20 2025)
 
 #### ⚠️ Pushed to `main`
