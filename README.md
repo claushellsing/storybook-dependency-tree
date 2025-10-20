@@ -5,7 +5,8 @@
 
 > **Note:** This project is a work in progress and is actively being developed.
 
-![Dependency Tree Preview](https://github.com/user-attachments/assets/10210129-c066-4097-88cf-606cf3cc7c88)
+<img width="2968" height="1482" alt="CleanShot 2025-10-20 at 09 25 09@2x" src="https://github.com/user-attachments/assets/bb459b0e-ab40-4ad0-915f-2c05f0a003a4" />
+
 
 ## Features
 - **Visual Dependency Mapping**: Automatically loads and displays all dependencies for the currently open story, providing a clear and structured view similar to [storybook-addon-deps](https://storybook.js.org/addons/storybook-addon-deps).
@@ -17,6 +18,7 @@
 ## Dependencies
 - **Dependency Loading**: Powered by [node-dependency-tree](https://github.com/dependents/node-dependency-tree) to accurately map and load dependencies.
 - **Tree View**: Utilizes [MUI X](https://github.com/mui/mui-x) for a robust and interactive tree view experience.
+- **Local Storage**: Uses it story dependency map
 
 ## Installation
 To install the addon, run the following command in your project directory:
