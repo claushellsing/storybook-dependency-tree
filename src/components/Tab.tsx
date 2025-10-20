@@ -83,32 +83,24 @@ const Column = styled('div')({
 
 export const Tab: React.FC = () => {
   const currentStoryPath = useParameter<string>('story_absolute_path');
-  const [dependencies, setDependencies] = useState<TreeViewBaseItem[]>([]);
-  const [dependants, setDependants] = useState<TreeViewBaseItem[]>([]);
-  const [dependenciesExpandedIds, setDependenciesExpandedIds] = useState<string[]>([]);
-  const [dependantsExpandedIds, setDependantsExpandedIds] = useState<string[]>([]);
 
-  useEffect(() => {
-
+  const { dependencies, dependants, dependenciesExpandedIds, dependantsExpandedIds } = useMemo(() => {
     const dependencyTreeObj = JSON.parse(localStorage.getItem('dependencyTreeObj') || '{}');
     const dependantsTreeObj = JSON.parse(localStorage.getItem('dependantsTreeObj') || '{}');
 
     const depsSource = dependencyTreeObj[currentStoryPath] || {};
-
     const mainComponentPath = Object.keys(depsSource)[0];
     const dependantsSource = mainComponentPath ? dependantsTreeObj[mainComponentPath] : {};
 
-    const depsTree = transformTree(depsSource);
-    const depsTreeFiltered = filterTree(depsTree);
+    const depsTreeFiltered = filterTree(transformTree(depsSource));
+    const dependantsTreeFiltered = filterTree(transformTree(dependantsSource));
 
-    const dependantsTree = transformTree(dependantsSource);
-    const dependantsTreeFiltered = filterTree(dependantsTree);
-
-    setDependencies(depsTreeFiltered);
-    setDependants(dependantsTreeFiltered);
-    setDependenciesExpandedIds(collectIds(depsTreeFiltered));
-    setDependantsExpandedIds(collectIds(dependantsTreeFiltered));
-
+    return {
+      dependencies: depsTreeFiltered,
+      dependants: dependantsTreeFiltered,
+      dependenciesExpandedIds: collectIds(depsTreeFiltered),
+      dependantsExpandedIds: collectIds(dependantsTreeFiltered),
+    };
   }, [currentStoryPath]);
 
     return (
