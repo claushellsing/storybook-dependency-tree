@@ -1,3 +1,16 @@
+# v0.0.23 (Mon Oct 20 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Streamline process using local storage and improve interface ([@claushellsing](https://github.com/claushellsing))
+- Upgrade to storybook 9.0 ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.22 (Thu Mar 06 2025)
 
 #### ⚠️ Pushed to `main`
