@@ -30,6 +30,13 @@ To install the addon, run the following command in your project directory:
 npm i storybook-dependency-tree
 ```
 
+> [!IMPORTANT]
+> **Storybook 8.x users**: install the v8-compatible build using the `v8-release` dist-tag.
+
+```bash
+npm install storybook-dependency-tree@v8-release
+```
+
 After installation, add 'storybook-dependency-tree' to the addons property inside your main Storybook configuration file (e.g., main.js):
 
 ```javascript

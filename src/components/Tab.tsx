@@ -85,8 +85,9 @@ export const Tab: React.FC = () => {
   const currentStoryPath = useParameter<string>('story_absolute_path');
 
   const { dependencies, dependants, dependenciesExpandedIds, dependantsExpandedIds } = useMemo(() => {
-    const dependencyTreeObj = JSON.parse(localStorage.getItem('dependencyTreeObj') || '{}');
-    const dependantsTreeObj = JSON.parse(localStorage.getItem('dependantsTreeObj') || '{}');
+    const w = (typeof window !== 'undefined' ? (window as any) : ({} as any));
+    const dependencyTreeObj = (w.__STORYBOOK_DEPENDENCY_TREE__ as Record<string, any>) || {};
+    const dependantsTreeObj = (w.__STORYBOOK_DEPENDANTS_TREE__ as Record<string, any>) || {};
 
     const depsSource = dependencyTreeObj[currentStoryPath] || {};
     const mainComponentPath = Object.keys(depsSource)[0];
