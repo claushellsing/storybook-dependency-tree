@@ -1,3 +1,15 @@
+# v0.0.29 (Mon Oct 20 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update packages ([@claushellsing](https://github.com/claushellsing))
+
+#### Authors: 1
+
+- Rainer Eli ([@claushellsing](https://github.com/claushellsing))
+
+---
+
 # v0.0.28 (Mon Oct 20 2025)
 
 #### ⚠️ Pushed to `main`
