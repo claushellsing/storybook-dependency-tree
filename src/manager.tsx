@@ -1,5 +1,5 @@
 import React from "react";
-import { addons, types } from "storybook/internal/manager-api";
+import { addons, types } from 'storybook/manager-api';
 
 import { Tab } from "./components/Tab";
 import { ADDON_ID, TAB_ID } from "./constants";

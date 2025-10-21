@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { styled } from 'storybook/internal/theming';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
-import { useParameter } from '@storybook/manager-api';
+import { useParameter } from 'storybook/manager-api';
 
 interface TreeNode {
   id: string;
