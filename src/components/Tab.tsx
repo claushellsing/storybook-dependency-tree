@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { styled } from 'storybook/internal/theming';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
-import { useParameter } from 'storybook/manager-api';
+import { useParameter } from '@storybook/manager-api';
 
 interface TreeNode {
   id: string;
@@ -85,8 +85,8 @@ export const Tab: React.FC = () => {
   const currentStoryPath = useParameter<string>('story_absolute_path');
 
   const { dependencies, dependants, dependenciesExpandedIds, dependantsExpandedIds } = useMemo(() => {
-    const dependencyTreeObj = JSON.parse(localStorage.getItem('dependencyTreeObj') || '{}');
-    const dependantsTreeObj = JSON.parse(localStorage.getItem('dependantsTreeObj') || '{}');
+    const dependencyTreeObj = ((window as any).__STORYBOOK_DEPENDENCY_TREE__ as Record<string, object>) || {};
+    const dependantsTreeObj = ((window as any).__STORYBOOK_DEPENDANTS_TREE__ as Record<string, object>) || {};
 
     const depsSource = dependencyTreeObj[currentStoryPath] || {};
     const mainComponentPath = Object.keys(depsSource)[0];

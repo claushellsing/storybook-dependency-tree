@@ -158,8 +158,12 @@ export function vitePreTreeDependencyPlugin(config: ViteConfig): Plugin {
         
         const dependantsTreeObj = buildDependantsFromDependencyTree(dependencyTreeObj);
         
-        newSource += `\nlocalStorage.setItem("dependencyTreeObj", '${JSON.stringify(dependencyTreeObj)}');`;
-        newSource += `\nlocalStorage.setItem("dependantsTreeObj", '${JSON.stringify(dependantsTreeObj)}');`;
+        newSource += "\ntry {";
+        newSource += "\n  if (typeof window !== 'undefined' && window.parent) {";
+        newSource += `\n    window.parent.__STORYBOOK_DEPENDENCY_TREE__ = ${JSON.stringify(dependencyTreeObj)};`;
+        newSource += `\n    window.parent.__STORYBOOK_DEPENDANTS_TREE__ = ${JSON.stringify(dependantsTreeObj)};`;
+        newSource += "\n  }";
+        newSource += "\n} catch (e) { console.warn('Failed to set window.parent globals for dependency tree', e); }";
       }
 
       return { code: newSource, map: null };
